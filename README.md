@@ -10,33 +10,53 @@ The original SATS website are:
 - [Denmark](https://www.sats.com/)
 - [Finland](https://www.elixia.fi/) (Named Elixia)
 
+_N.B.:_ The map is provided externally, but if you want to have a self-hosted map then I have a script to deploy an OpenStreetMap server [here](https://github.com/redouane-dev/my-scripts/blob/master/install-openstreetmap-tile-server.sh).
+
 
 ### Specifications
 This project uses [Mapbox](https://www.mapbox.com/) and is deployed via [Docker](https://www.docker.com/) on [Heroku](https://www.heroku.com) as a web application.
 
 
-### Containerized Application
+
+### Running the server
+
+You can run the server with either [GUncorn](https://gunicorn.org/) or via Docker.
+
+
+#### GUncorn
+
+```bash
+# Create a virtual environment (to avoid conflicts between dependencies in your Python projects)
+virtualenv -p python3 venv
+
+# Activate the newly created virtual environment
+source venv/bin/activate
+
+# Install the requirements
+pip install -r requirements.txt
+
+# Run the server
+gunicorn --bind 0.0.0.0:8080 app:app # [you can use localhost instead], [--reload for debug and dev mode only]
+```
+
+#### Containerized Application
 
 N.B.: We don't need a virtual environment for development in this case, as the application is dockerized.
 
-#### Build the Image
 ```bash
 # Build a new docker image and a new container base on it
-docker build --file Dockerfile --tag <image-name> .
+docker build --tag <image-name> . # [--file <dockerfile-name> to specify another Docker file]
 
 # Check that the image with name <image-name> has been successfully created
 docker images
-```
 
-#### Run the Container
-```bash
 # We're going to set the external port to 8080 but any free port can work. The internal port is designed to be 5000.
-docker run --detach -p 8080:5000 <image-name>
+docker run --detach -p 8080:8080 <image-name>
 ```
 
-#### Open the Application
+### Open the Application
 
-After running the container, you can open your browser at http://localhost:8080/ to see a map (You can customize your port number).
+After spinning the server, you can open your browser at http://localhost:8080/ to see a map
 
 ![Image displayed at localhost](./docs/images/localhost.png)
 
