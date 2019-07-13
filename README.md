@@ -4,6 +4,8 @@
 ### Brief Description
 The purpose is to make it easy to check whether your favorite SATS gym center is open, and also to check the available facilities, all of which in English and easy to access in one single map.
 
+The application deployed at [this link](https://my-gym-locator.herokuapp.com/)
+
 The original SATS website are:
 - [Sweden](https://www.sats.se/)
 - [Norway](https://www.sats.no/)
@@ -45,7 +47,7 @@ N.B.: We don't need a virtual environment for development in this case, as the a
 
 ```bash
 # Build a new docker image and a new container base on it
-docker build --tag <image-name> . # [--file <dockerfile-name> to specify another Docker file]
+docker build --file Dockerfile-local --tag <image-name> . # [--file <dockerfile-name> to specify non-default Dockerfile]
 
 # Check that the image with name <image-name> has been successfully created
 docker images
