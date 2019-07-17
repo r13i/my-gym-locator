@@ -7,10 +7,10 @@ The purpose is to make it easy to check whether your favorite SATS gym center is
 The application deployed at [this link](https://my-gym-locator.herokuapp.com/)
 
 The original SATS website are:
-- [Sweden](https://www.sats.se/)
-- [Norway](https://www.sats.no/)
-- [Denmark](https://www.sats.com/)
-- [Finland](https://www.elixia.fi/) (Named Elixia)
+- [Sweden](https://www.sats.se/): [Centers JSON](https://www.sats.se/webapi/filteredcenters/sv/0/0)
+- [Norway](https://www.sats.no/): [Centers JSON](https://www.sats.se/webapi/filteredcenters/no/0/0)
+- [Denmark](https://www.sats.com/): [Centers JSON](https://www.sats.com/webapi/filteredcenters/da/0/0)
+- [Finland](https://www.elixia.fi/) (Named Elixia): [Centers JSON](https://www.sats.se/webapi/filteredcenters/fi/0/0)
 
 _N.B.:_ The map is provided externally, but if you want to have a self-hosted map then I have a script to deploy an OpenStreetMap server [here](https://github.com/redouane-dev/my-scripts/blob/master/install-openstreetmap-tile-server.sh).
 
@@ -25,7 +25,7 @@ This project uses [Mapbox](https://www.mapbox.com/) and is deployed via [Docker]
 You can run the server with either [GUncorn](https://gunicorn.org/) or via Docker.
 
 
-#### GUncorn
+#### GUnicorn
 
 ```bash
 # Create a virtual environment (to avoid conflicts between dependencies in your Python projects)
@@ -43,7 +43,7 @@ gunicorn --bind 0.0.0.0:8080 app:app # [you can use localhost instead], [--reloa
 
 #### Containerized Application
 
-N.B.: We don't need a virtual environment for development in this case, as the application is dockerized.
+_N.B.:_ We don't need a virtual environment for development in this case, as the application is dockerized.
 
 ```bash
 # Build a new docker image and a new container base on it
@@ -56,9 +56,9 @@ docker images
 docker run --detach -p 8080:8080 <image-name>
 ```
 
-### Open the Application
+### Open the Local Application
 
-After spinning the server, you can open your browser at http://localhost:8080/ to see a map
+After spinning the server, you can open your browser at http://localhost:8080/ to see the map
 
 ![Image displayed at localhost](./docs/images/localhost.png)
 
