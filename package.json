@@ -1,0 +1,34 @@
+{
+  "name": "my-gym-locator",
+  "version": "1.0.0",
+  "description": "Map-based web application to help locate SATS gym centers in the Scandinavian area and provide relevant details.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redouane-dev/my-gym-locator.git"
+  },
+  "keywords": [
+    "map",
+    "geoposition",
+    "gym",
+    "SATS",
+    "docker",
+    "heroku"
+  ],
+  "author": "Redouane Achouri <achouri.a.r@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/redouane-dev/my-gym-locator/issues"
+  },
+  "homepage": "https://github.com/redouane-dev/my-gym-locator#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.2",
+    "express": "^4.17.1",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.5.0"
+  }
+}

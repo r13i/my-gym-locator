@@ -1,0 +1,17 @@
+{
+    "host": "0.0.0.0",
+    "port": 8080,
+    "favicon": "favicon.ico",
+
+    "gym_centers": {
+        "denmark": "https://www.sats.com/webapi/filteredcenters/da/0/0",
+        "finland": "https://www.sats.se/webapi/filteredcenters/fi/0/0",
+        "norway": "https://www.sats.se/webapi/filteredcenters/no/0/0",
+        "sweden": "https://www.sats.se/webapi/filteredcenters/sv/0/0"
+    },
+
+    "marker_icons": {
+        "dumbell_hexa": "../static/images/markers/dumbell-marker-hexa.png",
+        "dumbell_circle": "../static/images/markers/dumbell-marker-circle.png"
+    }
+}

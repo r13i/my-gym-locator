@@ -21,8 +21,9 @@ This project uses [Mapbox](https://www.mapbox.com/) and is deployed via [Docker]
 
 
 ### Running the server
+(Will be added shortly)
 
-You can run the server with either [GUncorn](https://gunicorn.org/) or via Docker.
+<!-- You can run the server with either [GUncorn](https://gunicorn.org/) or via Docker.
 
 
 #### GUnicorn
@@ -60,7 +61,7 @@ docker run --detach -p 8080:8080 <image-name>
 
 After spinning the server, you can open your browser at http://localhost:8080/ to see the map
 
-![Image displayed at localhost](./docs/images/localhost.png)
+![Image displayed at localhost](./docs/images/localhost.png) -->
 
 
 ## Perspectives
@@ -71,3 +72,8 @@ After spinning the server, you can open your browser at http://localhost:8080/ t
 - Add popups and information on the markers
 - Automate the process of fetching/parsing/displaying as a CRON job or others.
 - ...
+
+
+## Resources
+- [Dockerizing a Node.js web app](https://nodejs.org/de/docs/guides/nodejs-docker-webapp/)
+- [Build a Weather Website in 30 minutes with Node.js + Express + OpenWeather](https://codeburst.io/build-a-weather-website-in-30-minutes-with-node-js-express-openweather-a317f904897b)
