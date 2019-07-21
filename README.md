@@ -1,7 +1,7 @@
 # my-gym-locator
 [Work in Progress] Web application to locate SATS gym centers on a map and see the available facilities
 
-### Brief Description
+## Brief Description
 The purpose is to make it easy to check whether your favorite SATS gym center is open, and also to check the available facilities, all of which in English and easy to access in one single map.
 
 The application deployed at [this link](https://my-gym-locator.herokuapp.com/)
@@ -15,40 +15,71 @@ The original SATS website are:
 _N.B.:_ The map is provided externally, but if you want to have a self-hosted map then I have a script to deploy an OpenStreetMap server [here](https://github.com/redouane-dev/my-scripts/blob/master/install-openstreetmap-tile-server.sh).
 
 
-### Specifications
-This project uses [Mapbox](https://www.mapbox.com/) and is deployed via [Docker](https://www.docker.com/) on [Heroku](https://www.heroku.com) as a web application.
+## Specifications
+This project uses [Mapbox](https://www.mapbox.com/) and is deployed via [Docker](https://www.docker.com/) on [Heroku](https://www.heroku.com).
 
 
 
-### Running the server
-(Will be added shortly)
+## How to Start the Server
 
-<!-- You can run the server with either [GUncorn](https://gunicorn.org/) or via Docker.
+You can run the server via [Node JS](https://nodejs.org/en/) CLI or via a [Docker](https://www.docker.com/) container.
 
+We'll start by cloning or downloading the project.
 
-#### GUnicorn
+##### Clone Github repo
 
 ```bash
-# Create a virtual environment (to avoid conflicts between dependencies in your Python projects)
-virtualenv -p python3 venv
+# Clone the Github repo
+# cd to your project directory
+cd <path-to-project-directory>
 
-# Activate the newly created virtual environment
-source venv/bin/activate
-
-# Install the requirements
-pip install -r requirements.txt
-
-# Run the server
-gunicorn --bind 0.0.0.0:8080 app:app # [you can use localhost instead], [--reload for debug and dev mode only]
+git clone https://github.com/redouane-dev/my-gym-locator.git
 ```
 
-#### Containerized Application
+##### Download as ZIP
 
-_N.B.:_ We don't need a virtual environment for development in this case, as the application is dockerized.
+N.B.: By downloading instead of cloning, you will not have access to the Git branches, commits, ...etc.
+
+```bash
+# cd to your project directory
+cd <path-to-project-directory>
+
+# Download
+wget "https://github.com/redouane-dev/my-gym-locator/archive/master.zip"
+
+# Unzip
+unzip master.zip
+
+# Rename the project directory
+mv my-gym-locator-master/ my-gym-locator/
+```
+
+### Starting the server
+
+#### Node CLI
+
+```bash
+# Install the depedencies by going the project directory and installing with NPM
+cd <path-to>/my-gym-locator
+npm install
+
+# For development mode (To add the changes to the server automatically without restarting during development)
+npm install --no-save nodemon # You can add -g to install globally
+
+# Start (You'll see something like "... Server listening on PORT ...")
+node server.js
+
+# For development mode
+nodemon server.js
+```
+
+#### Dockerized Application
 
 ```bash
 # Build a new docker image and a new container base on it
-docker build --file Dockerfile-local --tag <image-name> . # [--file <dockerfile-name> to specify non-default Dockerfile]
+# Notice the dot at the end
+# Add --file <dockerfile-name> to specify non-default Dockerfile
+docker build --tag <image-name> .
 
 # Check that the image with name <image-name> has been successfully created
 docker images
@@ -57,16 +88,15 @@ docker images
 docker run --detach -p 8080:8080 <image-name>
 ```
 
-### Open the Local Application
+### Opening the app in localhost
 
 After spinning the server, you can open your browser at http://localhost:8080/ to see the map
 
-![Image displayed at localhost](./docs/images/localhost.png) -->
+![Image displayed at localhost](./docs/images/localhost.png)
 
 
 ## Perspectives
 
-- Validate deployment on Heroku
 - Parse JSON/XML files from the gym's website
 - Display markers on the map
 - Add popups and information on the markers

@@ -27,4 +27,4 @@ app.get('/', (req, res) => {
 });
 
 
-app.listen(PORT, HOST, () => console.log(`Example app listening on PORT ${PORT}!`));
+app.listen(PORT, HOST, () => console.log(`[my-gym-locator] Server listening on PORT ${PORT}!`));
