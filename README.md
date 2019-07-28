@@ -105,5 +105,12 @@ After spinning the server, you can open your browser at http://localhost:8080/ t
 
 
 ## Resources
+- [Building a store locator](https://docs.mapbox.com/help/tutorials/building-a-store-locator/)
 - [Dockerizing a Node.js web app](https://nodejs.org/de/docs/guides/nodejs-docker-webapp/)
 - [Build a Weather Website in 30 minutes with Node.js + Express + OpenWeather](https://codeburst.io/build-a-weather-website-in-30-minutes-with-node-js-express-openweather-a317f904897b)
+- [Using EJS with Express](https://github.com/mde/ejs/wiki/Using-EJS-with-Express)
+
+## Useful Docs
+- [Mapbox Web applications](https://docs.mapbox.com/help/how-mapbox-works/web-apps/)
+- [Style Specification](https://docs.mapbox.com/mapbox-gl-js/style-spec/)
+- [Style-optimized vector tiles](https://docs.mapbox.com/help/glossary/style-optimized-vector-tiles/)

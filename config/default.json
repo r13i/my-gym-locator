@@ -3,6 +3,8 @@
     "port": 8080,
     "favicon": "favicon.ico",
 
+    "mapbox_api_key": "pk.eyJ1IjoicmVkb3VhbmUtYWNob3VyaSIsImEiOiJjang2bHplb2UwMTJ5M3RwbDk2c2h1b2FsIn0.AyXmb8U5IIiokydzF7niVA",
+
     "gym_centers": {
         "denmark": "https://www.sats.com/webapi/filteredcenters/da/0/0",
         "finland": "https://www.sats.se/webapi/filteredcenters/fi/0/0",
@@ -11,7 +13,7 @@
     },
 
     "marker_icons": {
-        "dumbell_hexa": "../static/images/markers/dumbell-marker-hexa.png",
-        "dumbell_circle": "../static/images/markers/dumbell-marker-circle.png"
+        "dumbell_hexa": "/images/markers/dumbell-marker-hexa.png",
+        "dumbell_circle": "/images/markers/dumbell-marker-circle.png"
     }
 }
