@@ -41,11 +41,42 @@ function _updateGeojson(jsonData, geojsonPath) {
 
     jsonData['Regions'].forEach(region => {
         region['Centers'].forEach(center => {
+
+            let description = "<p>";
+
+            // Setup the center name (if available)
+            let name = `${(center["Name"]) ? `<strong>${center['Name']}</strong></br>` : ""}`;
+            let location = "<strong>Location: </strong>"
+                + center['Address'] + ", "
+                + center['City'] + ', '
+                + center['Zipcode'] + '.';
+
+            // Create a table for opening hours
+            let openingHoursTable = "";
+            if (center['OpeningHours'].length !== 0) {
+                openingHoursTable = `<table>
+                    <tr>
+                        <th colspan="2">Opening Hours</th>
+                    </tr>
+                    ${center['OpeningHours'].map(entry => `<tr><td>${entry['Day']}</td><td>${entry['Hours']}</td></tr>`).join(" ")}
+                    ${(center['OpeningHoursOther'].length === 0) ? "" : `
+                    <tr>
+                        <th colspan="2">Special</th>
+                    </tr>
+                    ${center['OpeningHoursOther'].map(entry => `<tr><td>${entry['Day']}</td><td>${entry['Hours']}</td></tr>`).join(" ")}`}
+                </table>`;
+            }
+
+            description += name + location + openingHoursTable;
+            description += "</p>";
+
+
             let feature = {
                 "type": "Feature",
                 "properties": {
                     "title": "TITLE???",    //////////////////////////////////////////////////////////
-                    "description": "<strong>Make it Mount Pleasant</strong><p><a href=\"http://www.mtpleasantdc.com/makeitmtpleasant\" target=\"_blank\" title=\"Opens in a new window\">Make it Mount Pleasant</a> is a handmade and vintage market and afternoon of live entertainment and kids activities. 12:00-6:00 p.m.</p>",
+                    "id": center['Id'],
+                    "description": description,
                     "icon": "volcano"
                 },
                 "geometry": {

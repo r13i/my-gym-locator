@@ -4,16 +4,20 @@
 <head>
     <meta charset='utf-8' />
     <title>My Gym Locator</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!-- <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' /> -->
+    <meta name='viewport' content='width=device-width, intial-scale=1.0'/>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/responsiveness.css" />
 </head>
 
 <body>
 
-    <div class="sidebar padded">Listing</div>
-    <div id="map" class="map padded">Map</div>
+    <!-- <div class="sidebar padded">Listing</div>
+    <div id="map" class="map"></div> -->
+    <div class="col-2 list">Listing</div>
+    <div id="map" class="col-10 map"></div>
 
     <script>
         mapboxgl.accessToken = <%- mapbox_api_key %>;
@@ -25,16 +29,17 @@
             zoom: 10
         });
 
+        // Add zoom and rotation controls to the map.
+        map.addControl(new mapboxgl.NavigationControl());
+
         map.on('load', function () {
-            // Add a layer showing the places.
             map.addLayer({
                 "id": "places",
                 "type": "symbol",
                 "source": {
                     "type": "geojson",
                     "data": "data/sweden.geojson",
-                    // "cluster": true,
-                    "attribution": "Made with <3 by Redouane Achouri"
+                    "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
                 },
                 "layout": {
                     "icon-image": "{icon}-15",
