@@ -1,5 +1,7 @@
 * {
     box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
 }
 
 /* Prioritize the design for mobile phones to make the page load faster on smaller devices */

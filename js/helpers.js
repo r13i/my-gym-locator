@@ -74,7 +74,7 @@ function _updateGeojson(jsonData, geojsonPath) {
             let feature = {
                 "type": "Feature",
                 "properties": {
-                    "title": "TITLE???",    //////////////////////////////////////////////////////////
+                    // "title": "TITLE???",
                     "id": center['Id'],
                     "description": description,
                     "icon": "volcano"
@@ -104,6 +104,22 @@ function _updateGeojson(jsonData, geojsonPath) {
 }
 
 
+function groupGeojson(geojsonFilesList) {
+    let data = {
+        "type": "FeatureCollection",
+        "features": []
+    };
+
+    geojsonFilesList.forEach(elem => {
+        let geojson = require(elem);
+        data['features'] = data['features'].concat(geojson['features']);
+    })
+
+    return data;
+}
+
+
 module.exports = {
     fetchData,
-}
+    groupGeojson,
+};

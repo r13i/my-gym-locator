@@ -13,10 +13,12 @@
 </head>
 
 <body>
-
-    <!-- <div class="sidebar padded">Listing</div>
-    <div id="map" class="map"></div> -->
-    <div class="col-2 list">Listing</div>
+    <div class="col-2 list">
+        <h5>Centers</h5>
+        <div id="listings" class="listings">
+            
+        </div>
+    </div>
     <div id="map" class="col-10 map"></div>
 
     <script>
@@ -38,7 +40,7 @@
                 "type": "symbol",
                 "source": {
                     "type": "geojson",
-                    "data": "data/sweden.geojson",
+                    "data": <%- data %>,
                     "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
                 },
                 "layout": {
@@ -46,7 +48,6 @@
                     "icon-allow-overlap": true
                 }
             });
-
 
 
             // When a click event occurs on a feature in the places layer, open a popup at the
