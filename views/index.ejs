@@ -7,19 +7,30 @@
     <!-- <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' /> -->
     <meta name='viewport' content='width=device-width, intial-scale=1.0'/>
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet' />
-    <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="/css/responsiveness.css" />
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/responsiveness.css"/>
 </head>
 
 <body>
-    <div class="col-2 list">
-        <h5>Centers</h5>
-        <div id="listings" class="listings">
-            
+    <div class="col-2 sidebar">
+        <div class="heading">
+            <h4>Centers</h4>
         </div>
+        <div id="listings" class="listings"></div>
     </div>
     <div id="map" class="col-10 map"></div>
+
+    <script>
+        // Old browsers compatibility
+        if (!("remove" in Element.prototype)) {
+            Element.prototype.remove = function() {
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                }
+            };
+        }
+    </script>
 
     <script>
         mapboxgl.accessToken = <%- mapbox_api_key %>;
@@ -35,12 +46,14 @@
         map.addControl(new mapboxgl.NavigationControl());
 
         map.on('load', function () {
+            let jsonData = <%- data %>;
+
             map.addLayer({
-                "id": "places",
+                "id": "centers",
                 "type": "symbol",
                 "source": {
                     "type": "geojson",
-                    "data": <%- data %>,
+                    "data": jsonData,
                     "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
                 },
                 "layout": {
@@ -49,10 +62,12 @@
                 }
             });
 
+            // Add the listing
+            buildCentersList(jsonData['features']);
 
-            // When a click event occurs on a feature in the places layer, open a popup at the
+            // When a click event occurs on a feature in the centers layer, open a popup at the
             // location of the feature, with description HTML from its properties.
-            map.on('click', 'places', function (e) {
+            map.on('click', 'centers', function (e) {
                 var coordinates = e.features[0].geometry.coordinates.slice();
                 var description = e.features[0].properties.description;
 
@@ -69,21 +84,72 @@
                     .addTo(map);
             });
 
-            // Change the cursor to a pointer when the mouse is over the places layer.
-            map.on('mouseenter', 'places', function () {
+            // Change the cursor to a pointer when the mouse is over the centers layer.
+            map.on('mouseenter', 'centers', function () {
                 map.getCanvas().style.cursor = 'pointer';
             });
 
             // Change it back to a pointer when it leaves.
-            map.on('mouseleave', 'places', function () {
+            map.on('mouseleave', 'centers', function () {
                 map.getCanvas().style.cursor = '';
             });
         });
     </script>
 
     <script>
-        function addMarker([lng, lat], icon=null) {
-            
+        function buildCentersList(data) {
+            // Get the listing DOM element
+            let listings = document.getElementById('listings');
+
+            // Transform the list of centers (elements) into map markers
+            data.forEach((elem, idx) => {
+
+                // Create an HTML div container with class 'item' for each center
+                let listing = listings.appendChild(document.createElement('div'));
+                listing.className = 'item';
+                listing.id = 'listing-' + idx;
+
+                // Create a link with class 'title' for each center and fill it with the center name
+                let title = listing.appendChild(document.createElement('a'));
+                title.href = '#';
+                title.className = 'title';
+                title.dataPosition = idx;
+                title.innerHTML = elem['properties']['title'];
+                title.addEventListener('click', (e) => {
+                    // Update the currentCenter to the center associated with the clicker link
+                    let clickedListing = elem;
+
+                    // Fly the point associated with the clicked link
+                    flyToCenter(clickedListing);
+
+                    // Close all popups and display popup for the clicked store
+                    createPopUp(clickedListing);
+
+                });
+
+                // Create a div with class 'details' for storing misc information
+                let details = listing.appendChild(document.createElement('div'));
+                details.innerHTML = elem['properties']['id'];
+            });
+        }
+
+        function flyToCenter(currentCenter) {
+            map.flyTo({
+                center: currentCenter['geometry']['coordinates'],
+                zoom: 15
+            });
+        }
+
+        function createPopUp(currentCenter) {
+            // Delete previous popups
+            let popUps = document.getElementsByClassName('mapboxgl-popup');
+            if (popUps[0]) popUps[0].remove();
+
+            // Create new popup
+            let popup = new mapboxgl.Popup({ closeOnClick: false })
+                .setLngLat(currentCenter['geometry']['coordinates'])
+                .setHTML(currentCenter['properties']['description'])
+                .addTo(map);
         }
     </script>
 

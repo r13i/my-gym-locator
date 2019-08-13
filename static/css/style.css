@@ -1,29 +1,90 @@
 body {
-    background: #404040;
-    color: #f8f8f8;
-    font: 500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif;
+    background: #0d2134;
+    /* color: #f8f8f8; */
+    color: #fff;
+    font: 500 20px/26px "robotoblack_italic", sans-serif;;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
 }
 
-.list {
-    padding: 0px 10px;
+a {
+    color: #fa5333;
+    text-decoration: none;
 }
 
-.marker {
-    background-image: url('../images/markers/dumbell-marker-circle.png');
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
+a:hover {
+    color: #fff;
 }
 
-.mapboxgl-popup {
-    max-width: 400px;
-    color: #404040;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+.sidebar {
+    overflow: hidden;
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.heading {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.listings {
+    height: 100%;
+    overflow: auto;
+    padding-bottom: 60px;
+}
+
+.listings .item {
+    display: block;
+    padding-bottom: rgba(255, 255, 255, 0.25);
+    padding: 10px;
+    text-decoration: none;
+}
+
+.listings .item:last-child { border-bottom: none; }
+
+.listings .item .title {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+}
+
+.listings .item .title small { font-weight: 400; }
+
+.listings .item.active .title,
+.listings .item .title:hover { color: #fa5333; }
+
+.listings .item.active { background-color: #fff; }
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fa5333;
+  border-radius: 0;
+}
+
+.clearfix { display: block; }
+
+.clearfix::after {
+  content: '.';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    /* font-size: 22px; */
+    /* line-height: 20px; */
+    margin: 0;
+    padding: 10px 5px;
+
+    font-family: "robotoblack_italic", sans-serif;
+    font-weight: 900;
+    line-height: 1.125;
+    color: inherit;
+    text-transform: uppercase;
+    font-style: italic;
 }
 
 table {
@@ -40,4 +101,65 @@ td, th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+}
+
+.marker {
+    background-image: url('../images/markers/dumbell-marker-circle.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.mapboxgl-popup {
+    max-width: 400px;
+    /* font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif; */
+}
+
+.mapboxgl-popup-close-button {
+    display: none;
+}
+
+.mapboxgl-popup-content {
+    font: 400 12px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
+    padding: 0;
+    width: 240px;
+    color: #000;
+    display: block;
+}
+
+.mapboxgl-popup-content-wrapper {
+    padding: 1%;
+}
+
+.mapboxgl-popup-content h3 {
+    background: #0d2134;
+    color: #fff;
+    margin: 0;
+    /* display: block; */
+    padding: 10px;
+    border-radius: 3px 3px 0 0;
+    font-weight: 700;
+    margin-top: -15px;
+}
+
+.mapboxgl-popup-content p {
+    padding: 0 10px;
+}
+
+.mapboxgl-popup-content div {
+    padding: 0 10px;
+}
+
+.mapboxgl-container .leaflet-marker-icon {
+    cursor: pointer;
+}
+
+.mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
+    margin-top: 15px;
+}
+
+.mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
+    border-bottom-color: #0d2134;
 }

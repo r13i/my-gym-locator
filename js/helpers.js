@@ -42,10 +42,10 @@ function _updateGeojson(jsonData, geojsonPath) {
     jsonData['Regions'].forEach(region => {
         region['Centers'].forEach(center => {
 
-            let description = "<p>";
+            let description = "";
 
             // Setup the center name (if available)
-            let name = `${(center["Name"]) ? `<strong>${center['Name']}</strong></br>` : ""}`;
+            let name = `${(center["Name"]) ? `<h3>${center['Name']}</h3>` : ""}`;
             let location = "<strong>Location: </strong>"
                 + center['Address'] + ", "
                 + center['City'] + ', '
@@ -67,7 +67,7 @@ function _updateGeojson(jsonData, geojsonPath) {
                 </table>`;
             }
 
-            description += name + location + openingHoursTable;
+            description += name + "<p>" + location + openingHoursTable + "</p>";
             description += "</p>";
 
 
@@ -76,6 +76,7 @@ function _updateGeojson(jsonData, geojsonPath) {
                 "properties": {
                     // "title": "TITLE???",
                     "id": center['Id'],
+                    "title": center["Name"],
                     "description": description,
                     "icon": "volcano"
                 },
