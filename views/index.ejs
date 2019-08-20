@@ -48,69 +48,59 @@
         map.on('load', function () {
             let jsonData = <%- data %>;
 
-            map.addLayer({
-                "id": "centers",
-                "type": "symbol",
-                "source": {
-                    "type": "geojson",
-                    "data": jsonData,
-                    "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
-                },
-                "layout": {
-                    "icon-image": "{icon}-15",
-                    "icon-allow-overlap": true
-                }
+            // map.addLayer({
+            //     "id": "centers",
+            //     "type": "symbol",
+            //     "source": {
+            //         "type": "geojson",
+            //         "data": jsonData,
+            //         "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
+            //     },
+            //     "layout": {
+            //         "icon-image": "{icon}-15",
+            //         "icon-allow-overlap": true
+            //     }
+            // });
+
+            map.addSource('centers', {
+                "type": "geojson",
+                "data": jsonData,
+                "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
             });
+
+            // Populate the map with markers
+            populateMap(jsonData['features']);
 
             // Add the listing
             buildCentersList(jsonData['features']);
 
-            // // When a click event occurs on a feature in the centers layer, open a popup at the
-            // // location of the feature, with description HTML from its properties.
-            // map.on('click', 'centers', function (e) {
-            //     var coordinates = e.features[0].geometry.coordinates.slice();
-            //     var description = e.features[0].properties.description;
+            // // Event listerner for clicks on the map
+            // map.on('click', function(e) {
+            //     // Query all the rendered points on the map
+            //     let features = map.queryRenderedFeatures(e.point, { layers: ['centers'] });
+            //     if (features.length) {
+            //         let clickedPoint = features[0];
 
-            //     // Ensure that if the map is zoomed out such that multiple
-            //     // copies of the feature are visible, the popup appears
-            //     // over the copy being pointed to.
-            //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            //         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            //         // Fly the point associated with the clicked link
+            //         flyToCenter(clickedPoint);
+
+            //         // Close all popups and display popup for the clicked store
+            //         createPopUp(clickedPoint);
+
+            //         // Highlight listing in sidebar and remove highlighting for other listings
+            //         let activeItem = document.getElementsByClassName('active');
+            //         if (activeItem[0]) {
+            //             activeItem[0].classList.remove('active');
+            //         }
+            //         // Find the index of the center corresponding to the clickedPoint that fired the event listener
+            //         let selectedFeatureIndex = jsonData['features'].findIndex((feature) => {
+            //             return (feature['properties']['id'] === clickedPoint['properties']['id']);
+            //         });
+
+            //         let listing = document.getElementById('listing-' + selectedFeatureIndex);
+            //         listing.classList.add('active');
             //     }
-
-            //     new mapboxgl.Popup()
-            //         .setLngLat(coordinates)
-            //         .setHTML(description)
-            //         .addTo(map);
             // });
-
-            // Event listerner for clicks on the map
-            map.on('click', function(e) {
-                // Query all the rendered points on the map
-                let features = map.queryRenderedFeatures(e.point, { layers: ['centers'] });
-                if (features.length) {
-                    let clickedPoint = features[0];
-
-                    // Fly the point associated with the clicked link
-                    flyToCenter(clickedPoint);
-
-                    // Close all popups and display popup for the clicked store
-                    createPopUp(clickedPoint);
-
-                    // Highlight listing in sidebar and remove highlighting for other listings
-                    let activeItem = document.getElementsByClassName('active');
-                    if (activeItem[0]) {
-                        activeItem[0].classList.remove('active');
-                    }
-                    // Find the index of the center corresponding to the clickedPoint that fired the event listener
-                    let selectedFeatureIndex = jsonData['features'].findIndex((feature) => {
-                        return (feature['properties']['id'] === clickedPoint['properties']['id']);
-                    });
-
-                    let listing = document.getElementById('listing-' + selectedFeatureIndex);
-                    listing.classList.add('active');
-                }
-            });
 
             // Change the cursor to a pointer when the mouse is over the centers layer.
             map.on('mouseenter', 'centers', function () {
@@ -125,6 +115,34 @@
     </script>
 
     <script>
+        function populateMap(data) {
+            data.forEach((feature, idx) => {
+                // Create a div element for the marker
+                let el = document.createElement('div');
+                // el.className = "marker";
+                el.classList.add('marker');
+                // By the image for the marker will be anchored by its center. We'll adjust accordingly
+                new mapboxgl.Marker(el, { offset: [0, -14] })
+                    .setLngLat(feature['geometry']['coordinates'])
+                    .addTo(map);
+
+                el.addEventListener('click', (e) => {
+                    // Fly the point associated with the clicked link
+                    flyToCenter(feature);
+                    // Close all popups and display popup for the clicked store
+                    createPopUp(feature);
+                    // Highlight listing in sidebar and remove highlighting for other listings
+                    e.stopPropagation();
+                    let activeItem = document.getElementsByClassName('active');
+                    if (activeItem[0]) {
+                        activeItem[0].classList.remove('active');
+                    }
+                    let listing = document.getElementById('listing-' + idx);
+                    listing.classList.add('active');
+                });
+            });
+        }
+
         function buildCentersList(data) {
             // Get the listing DOM element
             let listings = document.getElementById('listings');
