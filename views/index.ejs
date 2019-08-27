@@ -17,6 +17,9 @@
         <div class="heading">
             <h4>Centers</h4>
         </div>
+        <dif class="filters">
+            
+        </dif>
         <div id="listings" class="listings"></div>
     </div>
     <div id="map" class="col-10 map"></div>
@@ -39,7 +42,8 @@
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
             center: [18.070, 59.322],   // Center it on Stockholm, Sweden
-            zoom: 10
+            zoom: 10,
+            customAttribution: "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
         });
 
         // Add zoom and rotation controls to the map.
@@ -48,24 +52,9 @@
         map.on('load', function () {
             let jsonData = <%- data %>;
 
-            // map.addLayer({
-            //     "id": "centers",
-            //     "type": "symbol",
-            //     "source": {
-            //         "type": "geojson",
-            //         "data": jsonData,
-            //         "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
-            //     },
-            //     "layout": {
-            //         "icon-image": "{icon}-15",
-            //         "icon-allow-overlap": true
-            //     }
-            // });
-
             map.addSource('centers', {
                 "type": "geojson",
                 "data": jsonData,
-                "attribution": "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
             });
 
             // Populate the map with markers
@@ -73,34 +62,6 @@
 
             // Add the listing
             buildCentersList(jsonData['features']);
-
-            // // Event listerner for clicks on the map
-            // map.on('click', function(e) {
-            //     // Query all the rendered points on the map
-            //     let features = map.queryRenderedFeatures(e.point, { layers: ['centers'] });
-            //     if (features.length) {
-            //         let clickedPoint = features[0];
-
-            //         // Fly the point associated with the clicked link
-            //         flyToCenter(clickedPoint);
-
-            //         // Close all popups and display popup for the clicked store
-            //         createPopUp(clickedPoint);
-
-            //         // Highlight listing in sidebar and remove highlighting for other listings
-            //         let activeItem = document.getElementsByClassName('active');
-            //         if (activeItem[0]) {
-            //             activeItem[0].classList.remove('active');
-            //         }
-            //         // Find the index of the center corresponding to the clickedPoint that fired the event listener
-            //         let selectedFeatureIndex = jsonData['features'].findIndex((feature) => {
-            //             return (feature['properties']['id'] === clickedPoint['properties']['id']);
-            //         });
-
-            //         let listing = document.getElementById('listing-' + selectedFeatureIndex);
-            //         listing.classList.add('active');
-            //     }
-            // });
 
             // Change the cursor to a pointer when the mouse is over the centers layer.
             map.on('mouseenter', 'centers', function () {
@@ -181,7 +142,8 @@
 
                 // Create a div with class 'details' for storing misc information
                 let details = listing.appendChild(document.createElement('div'));
-                details.innerHTML = elem['properties']['id'];
+                // details.innerHTML = "<a href='" + elem['properties']['url'] + "' target='_blank'>Link</a>";
+                details.innerHTML = `<a href='${elem['properties']['url']}' target='_blank'>Link</a>`;
             });
         }
 

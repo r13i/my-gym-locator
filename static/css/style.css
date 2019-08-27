@@ -1,7 +1,6 @@
 body {
     background: #0d2134;
-    /* color: #f8f8f8; */
-    color: #fff;
+    color: #f8f8f8;
     font: 500 20px/26px "robotoblack_italic", sans-serif;;
     margin: 0;
     padding: 0;
@@ -37,6 +36,7 @@ a:hover {
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     padding: 10px;
     text-decoration: none;
+    font-size: 0.625em;
 }
 
 .listings .item:last-child { border-bottom: none; }
@@ -52,7 +52,10 @@ a:hover {
 .listings .item.active .title,
 .listings .item .title:hover { color: #fa5333; }
 
-.listings .item.active { background-color: #fff; }
+.listings .item.active {
+    background-color: #fff;
+    color: #0d2134;
+}
 
 ::-webkit-scrollbar-track {
   background: none;
@@ -74,8 +77,6 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    /* font-size: 22px; */
-    /* line-height: 20px; */
     margin: 0;
     padding: 10px 5px;
 
@@ -119,9 +120,9 @@ tr:nth-child(even) {
     /* font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif; */
 }
 
-.mapboxgl-popup-close-button {
+/* .mapboxgl-popup-close-button {
     display: none;
-}
+} */
 
 .mapboxgl-popup-content {
     font: 400 12px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
