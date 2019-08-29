@@ -82,7 +82,7 @@ function _createGeojson(jsonData, geojsonPath, url) {
                     "title": center["Name"],
                     "description": description,
                     "url": link,
-                    "openingHourse": dailyOpeningHours,
+                    "openingHours": dailyOpeningHours,
                 },
                 "geometry": {
                     "type": "Point",

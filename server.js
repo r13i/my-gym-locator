@@ -22,10 +22,10 @@ app.use(favicon(path.join(__dirname, 'static', 'images', 'favicon', config['favi
 app.locals.mapbox_api_key = JSON.stringify(MAPBOX_API_KEY);
 // app.locals.marker_icon = MARKER_ICON;
 
+helpers.fetchData(config['gym_centers']['sweden'], ROOT_DIR + '/static/data/sweden.json');
 helpers.fetchData(config['gym_centers']['denmark'], ROOT_DIR + '/static/data/denmark.json');
 helpers.fetchData(config['gym_centers']['finland'], ROOT_DIR + '/static/data/finland.json');
 helpers.fetchData(config['gym_centers']['norway'], ROOT_DIR + '/static/data/norway.json');
-helpers.fetchData(config['gym_centers']['sweden'], ROOT_DIR + '/static/data/sweden.json');
 
 
 app.get('/hello', (req, res) => res.send("Hello World!"));

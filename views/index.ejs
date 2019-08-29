@@ -80,7 +80,7 @@
             data.forEach((feature, idx) => {
                 // Create a div element for the marker
                 let el = document.createElement('div');
-                // el.className = "marker";
+                el.id = 'marker-' + feature['properties']['id'];
                 el.classList.add('marker');
                 // By the image for the marker will be anchored by its center. We'll adjust accordingly
                 new mapboxgl.Marker(el, { offset: [0, -14] })
@@ -164,6 +164,15 @@
                 .setLngLat(currentCenter['geometry']['coordinates'])
                 .setHTML(currentCenter['properties']['description'])
                 .addTo(map);
+        }
+
+        function timeFilter(data, timeStart=null, timeEnd=null) {
+            // Expected time format is minutes
+            if (timeStart !== null) {
+                data['features'].forEach(feature => {
+
+                });
+            }
         }
     </script>
 

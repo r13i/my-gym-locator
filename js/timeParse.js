@@ -1,7 +1,7 @@
 "use strict"
 
+// let monday      = ['måndag', 'mandag', 'maanantai', 'jäsenrannekkeella maanantai'];
 // let sunday      = ['söndag', 'søndag', 'sunnuntai'];
-// let monday      = ['måndag', 'mandag', 'maanantai'];
 // let tuesday     = ['tisdag', 'tirsdag', 'tiistai'];
 // let wednesday   = ['onsdag', 'keskiviikko'];
 // let thursday    = ['torsdag', 'torstai'];
@@ -9,7 +9,7 @@
 // let saturday    = ['lördag', 'lørdag', 'lauantai'];
 
 let daysOfWeek = [
-    ['måndag', 'mandag', 'maanantai'],
+    ['måndag', 'mandag', 'maanantai', 'jäsenrannekkeella maanantai'],
     ['tisdag', 'tirsdag', 'tiistai'],
     ['onsdag', 'keskiviikko'],
     ['torsdag', 'torstai'],
@@ -43,9 +43,9 @@ function parseDailyOpeningHours(center) {
 
     let dailyOpeningHours = {};
 
-    let count = 0;
-
-    center['OpeningHours'].forEach((elem) => {
+    // We need to use reverse because of the actual structure of the array
+    // Otherwise the information we need is overwritten by information such as 'manned opening hours'
+    center['OpeningHours'].reverse().forEach((elem) => {
         // In case of a range of days
         // Two separators are used in the JSON file: – or -
         if (/[–-]/.test(elem['Day'])) {
@@ -54,21 +54,24 @@ function parseDailyOpeningHours(center) {
             let [startDow, endDow] = [_getDayOfWeek(startDay), _getDayOfWeek(endDay)];
 
             for (let dow = startDow; dow <= endDow; dow++) {
-                dailyOpeningHours[dow] = elem['Hours'];
-                count++;
+                dailyOpeningHours[dow] = _parseHours(elem['Hours']);
             }
         } else {
             let day = _parseDay(elem['Day']);
             let dow = _getDayOfWeek(day);
-            dailyOpeningHours[dow] = elem['Hours'];
-            count++;
+            if (dow > -1) {
+                dailyOpeningHours[dow] = _parseHours(elem['Hours']);
+            }
         }
     });
 
-    if (count !== 7) {
-        console.log(center['Id'], JSON.stringify(center['OpeningHours'], null, 4));
-        console.log('==============================');
-    }
+    // let count = Object.keys(dailyOpeningHours).length;
+    // if (count !== 7) {
+    //     console.log(count);
+    //     console.log(center['Id']);
+    //     console.log(dailyOpeningHours);
+    //     console.log('==========================================');
+    // }
 
     return dailyOpeningHours;
 }
@@ -85,6 +88,24 @@ function _parseDay(rawDay) {
 function _getDayOfWeek(day) {
     // We'll lookup the index of the day given in a nordic language in the list of days
     return daysOfWeek.findIndex((arr) => arr.includes(day));
+}
+
+function _parseHours(rawHours) {
+    // Test if we have a range of house as expected
+    if (! /[–-]/.test(rawHours)) return -1;
+
+    let [startHour, endHour] = rawHours.split(/[–-]/);
+    [startHour, endHour] = [startHour.trim(), endHour.trim()];
+
+    return [_str2time(startHour), _str2time(endHour)];
+}
+
+function _str2time(str) {
+    let result = /(\d{1,2}):(\d{1,2})/.exec(str);
+    if (result === null) return -1;
+
+    let [hours, minutes] = [parseInt(result[1]), parseInt(result[2])];
+    return hours * 60 + minutes;
 }
 
 module.exports = {
