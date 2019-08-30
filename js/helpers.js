@@ -42,7 +42,6 @@ function _createGeojson(jsonData, geojsonPath, url) {
     jsonData['Regions'].forEach(region => {
         region['Centers'].forEach(center => {
 
-            
             // Setup the center name (if available)
             let name = `${(center["Name"]) ? `<h3>${center['Name']}</h3>` : ""}`;
             let location = "<strong>Location: </strong>"

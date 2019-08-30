@@ -1,6 +1,6 @@
 {
     "host": "0.0.0.0",
-    "port": 8080,
+    "port": 4444,
     "favicon": "favicon.ico",
 
     "mapbox_api_key": "pk.eyJ1IjoicmVkb3VhbmUtYWNob3VyaSIsImEiOiJjang2bHplb2UwMTJ5M3RwbDk2c2h1b2FsIn0.AyXmb8U5IIiokydzF7niVA",
