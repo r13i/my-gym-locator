@@ -25,13 +25,40 @@ a:hover {
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
+.filters {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+
+.filter-button {
+    border: 2px solid black;
+    border-color: #fa5333;
+    background-color: #fa5333;
+    color: #fff;
+    padding: 2px 4px;
+    margin: 2px;
+    cursor: pointer;
+}
+
+.filter-button:hover {
+    background: #fff;
+    color: #fa5333;
+}
+
+.filter-button.active {
+    background: rgb(230, 230, 230);
+    color: #fa5333;
+}
+
 .listings {
     height: 100%;
     overflow: auto;
     padding-bottom: 60px;
 }
 
-.listings .item {
+.listings .listing {
     display: block;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     padding: 10px;
@@ -39,20 +66,20 @@ a:hover {
     font-size: 0.625em;
 }
 
-.listings .item:last-child { border-bottom: none; }
+.listings .listing:last-child { border-bottom: none; }
 
-.listings .item .title {
+.listings .listing .title {
     display: block;
     color: #fff;
     font-weight: 700;
 }
 
-.listings .item .title small { font-weight: 400; }
+.listings .listing .title small { font-weight: 400; }
 
-.listings .item.active .title,
-.listings .item .title:hover { color: #fa5333; }
+.listings .listing.active .title,
+.listings .listing .title:hover { color: #fa5333; }
 
-.listings .item.active {
+.listings .listing.active {
     background-color: #fff;
     color: #0d2134;
 }
@@ -89,19 +116,19 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 td, th {
-  border: 1px solid #dddddd;
-  text-align: center;
-  padding: 2px 8px;
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 2px 8px;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+    background-color: #dddddd;
 }
 
 .marker {

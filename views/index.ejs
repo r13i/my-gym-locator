@@ -13,16 +13,16 @@
 </head>
 
 <body>
-    <div class="col-2 sidebar">
+    <div class="col-3 sidebar">
         <div class="heading">
             <h4>Centers</h4>
         </div>
-        <dif class="filters">
-            
+        <dif class="filters" id="filters">
+            <button class="filter-button active" onclick="filterRegion('all')">All</button>
         </dif>
-        <div id="listings" class="listings"></div>
+        <div class="listings" id="listings"></div>
     </div>
-    <div id="map" class="col-10 map"></div>
+    <div id="map" class="col-9 map"></div>
 
     <script>
         // Old browsers compatibility
@@ -73,7 +73,7 @@
                 map.getCanvas().style.cursor = '';
             });
 
-            timeFilter(jsonData, null, 22 * 60);
+            // filterTime(jsonData, null, 22 * 60);
         });
 
     </script>
@@ -81,10 +81,15 @@
     <script>
         function populateMap(data) {
             data.forEach((feature, idx) => {
+
+                let region = feature['properties']['region'].split(/\s/)[0].trim();
+
                 // Create a div element for the marker
                 let el = document.createElement('div');
                 el.id = 'marker-' + idx;
                 el.classList.add('marker');
+                el.classList.add(region);
+
                 // By the image for the marker will be anchored by its center. We'll adjust accordingly
                 new mapboxgl.Marker(el, { offset: [0, -14] })
                     .setLngLat(feature['geometry']['coordinates'])
@@ -97,10 +102,9 @@
                     createPopUp(feature);
                     // Highlight listing in sidebar and remove highlighting for other listings
                     e.stopPropagation();
-                    let activeItem = document.getElementsByClassName('active');
-                    if (activeItem[0]) {
-                        activeItem[0].classList.remove('active');
-                    }
+                    let activeListings = document.querySelectorAll('.listing, .active');
+                    Array.prototype.forEach.call(activeListings, (listing) => listing.classList.remove('active'));
+
                     let listing = document.getElementById('listing-' + idx);
                     listing.classList.add('active');
                 });
@@ -110,14 +114,19 @@
         function buildCentersList(data) {
             // Get the listing DOM element
             let listings = document.getElementById('listings');
+            let filters = document.getElementById('filters');
 
             // Transform the list of centers (elements) into map markers
             data.forEach((feature, idx) => {
 
-                // Create an HTML div container with class 'item' for each center
+                // Store the region name for later use it to filter centers by region (Stockholm, Oslo, ...)
+                let region = feature['properties']['region'].split(/\s/)[0].trim();
+
+                // Create an HTML div container with class 'listing' for each center
                 let listing = listings.appendChild(document.createElement('div'));
                 listing.id = 'listing-' + idx;
-                listing.className = 'item';
+                listing.classList.add('listing');
+                listing.classList.add(region);
 
                 // Create a link with class 'title' for each center and fill it with the center name
                 let title = listing.appendChild(document.createElement('a'));
@@ -136,10 +145,9 @@
                     createPopUp(clickedListing);
 
                     // Highlight listing in sidebar and remove highlighting for other listings
-                    let activeItem = document.getElementsByClassName('active');
-                    if (activeItem[0]) {
-                        activeItem[0].classList.remove('active');
-                    }
+                    let activeListings = document.querySelectorAll('.listing, .active');
+                    Array.prototype.forEach.call(activeListings, (listing) => listing.classList.remove('active'));
+
                     title.parentNode.classList.add('active');    // Make the whole parent (not only the actual title) active
                 });
 
@@ -147,13 +155,27 @@
                 let details = listing.appendChild(document.createElement('div'));
                 // details.innerHTML = "<a href='" + feature['properties']['url'] + "' target='_blank'>Link</a>";
                 details.innerHTML = `<a href='${feature['properties']['url']}' target='_blank'>Link</a>`;
+
+                // Create filter buttons
+                if (document.getElementById(region) === null) {
+                    let filterButton = document.createElement('button');
+                    filterButton.id = region;
+                    filterButton.classList.add('filter-button');
+
+                    // Set the button text to first letter upper case
+                    filterButton.innerText = region[0].toUpperCase() + region.slice(1);
+                    filterButton.onclick = () => filterRegion(filterButton, region);
+                    filters.appendChild(filterButton);
+                }
             });
         }
 
         function flyToCenter(currentCenter) {
             map.flyTo({
                 center: currentCenter['geometry']['coordinates'],
-                zoom: 15
+                zoom: 15,
+                speed: 5,
+                curve: 1
             });
         }
 
@@ -169,12 +191,13 @@
                 .addTo(map);
         }
 
-        function timeFilter(data, timeStart = null, timeEnd = null) {
+        function filterTime(data, timeStart = null, timeEnd = null) {
             // Get today's day of week (saturday -> 0 ... sunday -> 6)
             let todayDow = (new Date()).getDay();
 
-            // As the data from the gym's website is formatted to start the week on mondays (monday -> 0 ... sunday -> 6), we need
-            //  to increment today's dow by 1, while keeping into perspective the 0 to 6 range
+            // As the data from the gym's website is formatted to start the week on
+            // mondays (monday -> 0 ... sunday -> 6), we need
+            // to increment today's dow by 1, while keeping into perspective the 0 to 6 range
             todayDow = (todayDow + 6) % 7;
 
             // Expected time format is minutes
@@ -190,6 +213,43 @@
                     document.getElementById('listing-' + idx).style.display = 'none';
                 }
             });
+        }
+
+        function filterRegion(button, region) {
+
+            // Set all the buttons to not 'active'
+            let activeButtons = document.querySelectorAll('.filter-button, .active');
+            Array.prototype.forEach.call(activeButtons, (button) => button.classList.remove('active'));
+
+            // Set the pressed button to active
+            button.classList.add('active');
+
+            if (region === 'all') {
+                let markers = document.getElementsByClassName('marker');
+                // Iterate over the NodeList returned by the function 'getElementsByClassName'
+                Array.prototype.forEach.call(markers, (marker) => marker.style.display = 'block');
+                
+                let listings = document.getElementsByClassName('listing');
+                Array.prototype.forEach.call(listings, (listing) => listing.style.display = 'block');
+            } else {
+                let markers = document.getElementsByClassName('marker');
+                
+                // Iterate over the NodeList returned by the function 'getElementsByClassName'
+                Array.prototype.forEach.call(markers, function(marker) {
+                    // Hide all the other markers
+                    if (! marker.classList.contains(region)) marker.style.display = 'none';
+                    // and show only the one selected 
+                    else marker.style.display = 'block';
+                });
+                
+                let listings = document.getElementsByClassName('listing');
+                Array.prototype.forEach.call(listings, function(listing) {
+                    // Hide all the other markers
+                    if (! listing.classList.contains(region)) listing.style.display = 'none';
+                    // and show only the one selected 
+                    else listing.style.display = 'block';
+                });
+            }
         }
     </script>
 

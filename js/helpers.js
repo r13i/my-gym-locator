@@ -40,15 +40,17 @@ function _createGeojson(jsonData, geojsonPath, url) {
     };
 
     jsonData['Regions'].forEach(region => {
+        // Normalize the region name
+        let regionName = region['Name'].trim().toLowerCase();
+        
         region['Centers'].forEach(center => {
-
             // Setup the center name (if available)
             let name = `${(center["Name"]) ? `<h3>${center['Name']}</h3>` : ""}`;
             let location = "<strong>Location: </strong>"
             + center['Address'] + ", "
             + center['City'] + ', '
             + center['Zipcode'] + '.';
-            
+
             // Create a table for opening hours
             let openingHoursTable = "";
             if (center['OpeningHours'].length !== 0) {
@@ -76,9 +78,9 @@ function _createGeojson(jsonData, geojsonPath, url) {
             let feature = {
                 "type": "Feature",
                 "properties": {
-                    // "title": "TITLE???",
                     "id": center['Id'],
                     "title": center["Name"],
+                    "region": regionName,
                     "description": description,
                     "url": link,
                     "openingHours": dailyOpeningHours,
@@ -91,7 +93,6 @@ function _createGeojson(jsonData, geojsonPath, url) {
                     ]
                 }
             }
-
             geojson['features'].push(feature);
         });
     });

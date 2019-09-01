@@ -4,6 +4,7 @@
     -moz-box-sizing: border-box;
 }
 
+/* Mobile-first Approach */
 /* Prioritize the design for mobile phones to make the page load faster on smaller devices */
 [class*="col-"] {
     width: 100%;
@@ -11,12 +12,12 @@
 
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6 {
 /* [class *= "col-1"]:[class *= "col-6"] { */
-    height: 34vh;
+    height: 45vh;
 }
 
 .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
 /* [class *= "col-7"]:[class *= "col-12"] { */
-    height: 66vh;
+    height: 55vh;
 }
 
 @media only screen and (min-width: 768px) {
