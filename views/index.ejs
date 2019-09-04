@@ -15,11 +15,19 @@
 <body>
     <div class="col-3 sidebar">
         <div class="heading">
-            <h4>Centers</h4>
+            <h4>Find your center!</h4>
         </div>
-        <dif class="filters" id="filters">
-            <button class="filter-button active" onclick="filterRegion('all')">All</button>
-        </dif>
+        <div class="filters-container">
+            <div id="filters">
+                <button class="filter-button active" id="filter-button-all" onclick="filterRegion('all')">All</button>
+            </div>
+            <span>
+                <h6>Opening:</h6>
+                <input type="range" min="1" max="100" value="50">
+            </span>
+        </div>
+
+
         <div class="listings" id="listings"></div>
     </div>
     <div id="map" class="col-9 map"></div>
@@ -75,7 +83,6 @@
 
             // filterTime(jsonData, null, 22 * 60);
         });
-
     </script>
 
     <script>
@@ -164,7 +171,7 @@
 
                     // Set the button text to first letter upper case
                     filterButton.innerText = region[0].toUpperCase() + region.slice(1);
-                    filterButton.onclick = () => filterRegion(filterButton, region);
+                    filterButton.onclick = () => filterRegion(region, filterButton);
                     filters.appendChild(filterButton);
                 }
             });
@@ -215,14 +222,18 @@
             });
         }
 
-        function filterRegion(button, region) {
+        function filterRegion(region, button = null) {
 
             // Set all the buttons to not 'active'
             let activeButtons = document.querySelectorAll('.filter-button, .active');
             Array.prototype.forEach.call(activeButtons, (button) => button.classList.remove('active'));
 
             // Set the pressed button to active
-            button.classList.add('active');
+            if (button !== null) {
+                button.classList.add('active');
+            } else if (region === 'all') {
+                document.getElementById('filter-button-all').classList.add('active');
+            }
 
             if (region === 'all') {
                 let markers = document.getElementsByClassName('marker');
