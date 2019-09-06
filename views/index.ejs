@@ -19,12 +19,16 @@
         </div>
         <div class="filters-container">
             <div id="filters">
-                <button class="filter-button active" id="filter-button-all" onclick="filterRegion('all')">All</button>
+                <button class="filter-button active" id="filter-button-all" onclick="filterRegion('all');">All</button>
             </div>
-            <span>
-                <h6>Opening:</h6>
-                <input type="range" min="1" max="100" value="50">
-            </span>
+            <div>
+                <h6>Opening: <em id='text-opening'>All</em>
+                    <input id='slider-opening' type="range" min="0" max="1439" value="0" step="30" oninput="filterTime();">
+                </h6>
+                <h6>Closing: <em id='text-closing'>All</em>
+                    <input id='slider-closing' type="range" min="0" max="1439" value="1439" step="30" oninput="filterTime();">
+                </h6>
+            </div>
         </div>
 
 
@@ -58,18 +62,18 @@
         map.addControl(new mapboxgl.NavigationControl());
 
         map.on('load', function () {
-            let jsonData = <%- data %>;
+            window.geojson = <%- data %>;
 
             map.addSource('centers', {
                 "type": "geojson",
-                "data": jsonData,
+                "data": window.geojson,
             });
 
             // Populate the map with markers
-            populateMap(jsonData['features']);
+            populateMap();
 
             // Add the listing
-            buildCentersList(jsonData['features']);
+            buildCentersList();
 
             // Change the cursor to a pointer when the mouse is over the centers layer.
             map.on('mouseenter', 'centers', function () {
@@ -80,14 +84,12 @@
             map.on('mouseleave', 'centers', function () {
                 map.getCanvas().style.cursor = '';
             });
-
-            // filterTime(jsonData, null, 22 * 60);
         });
     </script>
 
     <script>
-        function populateMap(data) {
-            data.forEach((feature, idx) => {
+        function populateMap() {
+            window.geojson['features'].forEach((feature, idx) => {
 
                 let region = feature['properties']['region'].split(/\s/)[0].trim();
 
@@ -118,13 +120,13 @@
             });
         }
 
-        function buildCentersList(data) {
+        function buildCentersList() {
             // Get the listing DOM element
             let listings = document.getElementById('listings');
             let filters = document.getElementById('filters');
 
             // Transform the list of centers (elements) into map markers
-            data.forEach((feature, idx) => {
+            window.geojson['features'].forEach((feature, idx) => {
 
                 // Store the region name for later use it to filter centers by region (Stockholm, Oslo, ...)
                 let region = feature['properties']['region'].split(/\s/)[0].trim();
@@ -198,7 +200,27 @@
                 .addTo(map);
         }
 
-        function filterTime(data, timeStart = null, timeEnd = null) {
+        function _minutes2str(num) {
+            // Formats number of minutes to 'HH:MM'
+            let hours = Math.floor(num / 60);
+            let minutes = num % 60;
+
+            // Make sure returned numbers are 2 digits (padding with 0 at the left)
+            hours = hours.toString().padStart(2, '0');
+            minutes = minutes.toString().padStart(2, '0');
+
+            return `${hours}:${minutes}`;
+        }
+
+        // function filterTime(data, timeStart = null, timeEnd = null) {
+        function filterTime() {
+
+            let timeStart = Number.parseInt(document.getElementById('slider-opening').value);
+            let timeEnd = Number.parseInt(document.getElementById('slider-closing').value);
+
+            document.getElementById('text-opening').innerText = _minutes2str(timeStart);
+            document.getElementById('text-closing').innerText = _minutes2str(timeEnd);
+
             // Get today's day of week (saturday -> 0 ... sunday -> 6)
             let todayDow = (new Date()).getDay();
 
@@ -211,9 +233,8 @@
             if (timeStart === null) timeStart = Number.POSITIVE_INFINITY;
             if (timeEnd === null) timeEnd = Number.NEGATIVE_INFINITY;
 
-            data['features'].forEach((feature, idx) => {
+            window.geojson['features'].forEach((feature, idx) => {
                 let todayOpeningHours = feature['properties']['openingHours'][todayDow]
-                console.log(todayOpeningHours[1], timeStart)
 
                 if (todayOpeningHours[0] > timeStart || todayOpeningHours[1] < timeEnd) {
                     document.getElementById('marker-' + idx).style.display = 'none';
