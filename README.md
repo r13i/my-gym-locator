@@ -4,7 +4,7 @@
 ## Brief Description
 The purpose is to make it easy to check whether your favorite SATS gym center is open, and also to check the available facilities, all of which in English and easy to access in one single map.
 
-The application deployed at [this link](https://my-gym-locator.herokuapp.com/)
+The application is deployed at [this link](https://my-gym-locator.herokuapp.com/)
 
 The original SATS website are:
 - [Sweden](https://www.sats.se/): [Centers JSON](https://www.sats.se/webapi/filteredcenters/sv/0/0)
@@ -17,7 +17,6 @@ _N.B.:_ The map is provided externally, but if you want to have a self-hosted ma
 
 ## Specifications
 This project uses [Mapbox](https://www.mapbox.com/) and is deployed via [Docker](https://www.docker.com/) on [Heroku](https://www.heroku.com).
-
 
 
 ## How to Start the Server
@@ -70,7 +69,7 @@ npm install --no-save nodemon # You can add -g to install globally
 node server.js
 
 # For development mode
-nodemon server.js
+nodemon --ignore static/data server.js
 ```
 
 #### Dockerized Application
@@ -84,25 +83,21 @@ docker build --tag <image-name> .
 # Check that the image with name <image-name> has been successfully created
 docker images
 
-# We're going to set the external port to 8080 but any free port can work. The internal port is designed to be 5000.
-docker run --detach -p 8080:8080 <image-name>
+# We're going to set the external port to 4444 but any free port can work. The internal port is designed to be 4444.
+docker run --detach -p 4444:4444 <image-name>
 ```
 
 ### Opening the app in localhost
 
-After spinning the server, you can open your browser at http://localhost:8080/ to see the map
+After spinning the server, you can open your browser at http://localhost:4444/ to see the map
 
 ![Image displayed at localhost](./docs/images/localhost.png)
 
 
 ## Perspectives
 
-- Parse JSON/XML files from the gym's website
-- Display markers on the map
-- Add popups and information on the markers
-- Automate the process of fetching/parsing/displaying as a CRON job or others.
-- ...
-
+- Improve the UX
+- Add other gyms
 
 ## Resources
 - [Building a store locator](https://docs.mapbox.com/help/tutorials/building-a-store-locator/)
