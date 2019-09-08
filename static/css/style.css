@@ -48,7 +48,7 @@ a:hover {
 }
 
 .filter-button.active {
-    background: rgb(230, 230, 230);
+    background: #fff;
     color: #fa5333;
 }
 

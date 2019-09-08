@@ -15,28 +15,29 @@
 <body>
     <div class="col-3 sidebar">
         <div class="heading">
-            <h4>Find your center!</h4>
+            <h4>Find your gym!</h4>
         </div>
         <div class="filters-container">
             <div id="filters">
                 <button class="filter-button active" id="filter-button-all" onclick="filterRegion('all');">All</button>
             </div>
             <div>
-                <h6>Opening: <em id='text-opening'>All</em>
-                    <input id='slider-opening' type="range" min="0" max="1439" value="0" step="30" oninput="filterTime();">
+                <h6>Today's (<em id="today-date"></em>) opening hours:</h6>
+                <h6 style="display:inline-flex;">Opening: <em id='text-opening'>All</em>
+                    <input id='slider-opening' type="range" min="0" max="1440" value="720" step="30" oninput="filterTime();">
                 </h6>
-                <h6>Closing: <em id='text-closing'>All</em>
-                    <input id='slider-closing' type="range" min="0" max="1439" value="1439" step="30" oninput="filterTime();">
+                <h6 style="display:inline-flex;">Closing: <em id='text-closing'>All</em>
+                    <input id='slider-closing' type="range" min="0" max="1440" value="720" step="30" oninput="filterTime();">
                 </h6>
             </div>
         </div>
-
 
         <div class="listings" id="listings"></div>
     </div>
     <div id="map" class="col-9 map"></div>
 
     <script>
+        // Define some constants and helper functions
         // Old browsers compatibility
         if (!("remove" in Element.prototype)) {
             Element.prototype.remove = function() {
@@ -45,6 +46,7 @@
                 }
             };
         }
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     </script>
 
     <script>
@@ -63,6 +65,9 @@
 
         map.on('load', function () {
             window.geojson = <%- data %>;
+
+            // Setup today's date in the filter panel
+            document.getElementById('today-date').innerText = daysOfWeek[(new Date()).getDay()];
 
             map.addSource('centers', {
                 "type": "geojson",
@@ -229,9 +234,9 @@
             // to increment today's dow by 1, while keeping into perspective the 0 to 6 range
             todayDow = (todayDow + 6) % 7;
 
-            // Expected time format is minutes
-            if (timeStart === null) timeStart = Number.POSITIVE_INFINITY;
-            if (timeEnd === null) timeEnd = Number.NEGATIVE_INFINITY;
+            // // Expected time format is minutes
+            // if (timeStart === null) timeStart = Number.POSITIVE_INFINITY;
+            // if (timeEnd === null) timeEnd = Number.NEGATIVE_INFINITY;
 
             window.geojson['features'].forEach((feature, idx) => {
                 let todayOpeningHours = feature['properties']['openingHours'][todayDow]
@@ -239,6 +244,9 @@
                 if (todayOpeningHours[0] > timeStart || todayOpeningHours[1] < timeEnd) {
                     document.getElementById('marker-' + idx).style.display = 'none';
                     document.getElementById('listing-' + idx).style.display = 'none';
+                } else {
+                    document.getElementById('marker-' + idx).style.display = 'block';
+                    document.getElementById('listing-' + idx).style.display = 'block';
                 }
             });
         }

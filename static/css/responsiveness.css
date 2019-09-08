@@ -12,12 +12,12 @@
 
 .col-1, .col-2, .col-3, .col-4, .col-5, .col-6 {
 /* [class *= "col-1"]:[class *= "col-6"] { */
-    height: 45vh;
+    height: 60vh;
 }
 
 .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
 /* [class *= "col-7"]:[class *= "col-12"] { */
-    height: 55vh;
+    height: 40vh;
 }
 
 @media only screen and (min-width: 768px) {
