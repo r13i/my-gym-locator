@@ -22,7 +22,15 @@
                 <button class="filter-button active" id="filter-button-all" onclick="filterRegion('all');">All</button>
             </div>
             <div>
-                <h6>Today's (<em id="today-date"></em>) opening hours:</h6>
+                <!-- <h6>Today's (<em id="today-date"></em>) opening hours:</h6> -->
+
+                <h6>
+                    <div id='date-filter' class="date-filter">
+                        <button id='today-date' class="dropbtn"></button>
+                        <div id='date-filter-content' class="date-filter-content"></div>
+                    </div>
+                    opening hours:
+                </h6>
                 <h6 style="display:inline-flex;">Opening: <em id='text-opening'>All</em>
                     <input id='slider-opening' type="range" min="0" max="1440" value="720" step="30" oninput="filterTime();">
                 </h6>
@@ -67,7 +75,10 @@
             window.geojson = <%- data %>;
 
             // Setup today's date in the filter panel
-            document.getElementById('today-date').innerText = daysOfWeek[(new Date()).getDay()];
+            window.dow = new Date().getDay();
+            document.getElementById('today-date').innerText = daysOfWeek[window.dow];
+
+            populateDaysDropList();
 
             map.addSource('centers', {
                 "type": "geojson",
@@ -226,20 +237,17 @@
             document.getElementById('text-opening').innerText = _minutes2str(timeStart);
             document.getElementById('text-closing').innerText = _minutes2str(timeEnd);
 
-            // Get today's day of week (saturday -> 0 ... sunday -> 6)
-            let todayDow = (new Date()).getDay();
-
             // As the data from the gym's website is formatted to start the week on
             // mondays (monday -> 0 ... sunday -> 6), we need
-            // to increment today's dow by 1, while keeping into perspective the 0 to 6 range
-            todayDow = (todayDow + 6) % 7;
+            // to increment dow by 1, while keeping into perspective the 0 to 6 range
+            dow = (window.dow + 6) % 7;
 
             // // Expected time format is minutes
             // if (timeStart === null) timeStart = Number.POSITIVE_INFINITY;
             // if (timeEnd === null) timeEnd = Number.NEGATIVE_INFINITY;
 
             window.geojson['features'].forEach((feature, idx) => {
-                let todayOpeningHours = feature['properties']['openingHours'][todayDow]
+                let todayOpeningHours = feature['properties']['openingHours'][dow]
 
                 if (todayOpeningHours[0] > timeStart || todayOpeningHours[1] < timeEnd) {
                     document.getElementById('marker-' + idx).style.display = 'none';
@@ -289,6 +297,40 @@
                     // and show only the one selected 
                     else listing.style.display = 'block';
                 });
+            }
+        }
+
+        function populateDaysDropList() {
+
+            // Remove the list and recreate an empty one
+            document.getElementById('date-filter-content').remove()
+            // Recreate
+            let dropList = document.createElement('div')
+            dropList.id = 'date-filter-content';
+            dropList.className = "date-filter-content";
+            // Append to parent element
+            document.getElementById('date-filter').appendChild(dropList);
+
+            // Fill-up the drop button of days of week.
+            // The mathematical principle is simple: We add 7 to today's day of week, then
+            // we substract numbers from 1 to 6 to get the remaining days of week, while keeping
+            // using modulo % to get a number between 0 and 6
+            let todayDow = window.dow + 7;
+            for (let idx = 1; idx <= 6; idx++) {
+                dow = (todayDow - idx) % 7;
+
+                let a = document.createElement('a');
+                a.href = '#';
+
+                a.innerText = daysOfWeek[dow];
+                a.onclick = () => {
+                    window.dow = dow;
+                    document.getElementById('today-date').innerText = daysOfWeek[window.dow];
+                    populateDaysDropList();
+                    filterTime();
+                };
+
+                document.getElementById('date-filter-content').appendChild(a);
             }
         }
     </script>

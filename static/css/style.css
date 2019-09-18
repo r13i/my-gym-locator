@@ -52,6 +52,50 @@ a:hover {
     color: #fa5333;
 }
 
+
+
+.dropbtn {
+  background-color: #3498DB;
+  color: white;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  border: none;
+}
+
+.date-filter {
+  position: relative;
+  display: inline-block;
+}
+
+.date-filter-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 100px;
+  bottom: 25px;
+  z-index: 1;
+}
+
+.date-filter-content a {
+  color: black;
+  padding: 4px 8px;
+  text-decoration: none;
+  display: block;
+}
+
+.date-filter-content a:hover {background-color: #ccc}
+
+.date-filter:hover .date-filter-content {
+  display: block;
+}
+
+.date-filter:hover .dropbtn {
+  background-color: #2980B9;
+}
+
+
+
 .listings {
     height: 100%;
     overflow: auto;
