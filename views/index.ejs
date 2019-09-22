@@ -15,15 +15,13 @@
 <body>
     <div class="col-3 sidebar">
         <div class="heading">
-            <h4>Find your gym!</h4>
+            <h4>Find your <em style="color:#fa5333;">SATS</em> center!</h4>
         </div>
         <div class="filters-container">
-            <div id="filters">
+            <div id="region-filter">
                 <button class="filter-button active" id="filter-button-all" onclick="filterRegion('all');">All</button>
             </div>
             <div>
-                <!-- <h6>Today's (<em id="today-date"></em>) opening hours:</h6> -->
-
                 <h6>
                     <div id='date-filter' class="date-filter">
                         <button id='today-date' class="dropbtn"></button>
@@ -64,7 +62,7 @@
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
             center: [18.070, 59.322],   // Center it on Stockholm, Sweden
-            zoom: 10,
+            zoom: 11,
             customAttribution: "<span style=\"color:#404040;\">Made with <3 by <a style=\"text-decoration: underline;\" href=\"https://redouane-dev.github.io/\" target=\"_blank\">Redouane Achouri</a></span>"
         });
 
@@ -83,6 +81,8 @@
             map.addSource('centers', {
                 "type": "geojson",
                 "data": window.geojson,
+                'cluster': true,
+                'clusterRadius': 3
             });
 
             // Populate the map with markers
@@ -132,6 +132,7 @@
 
                     let listing = document.getElementById('listing-' + idx);
                     listing.classList.add('active');
+                    listing.scrollIntoView();
                 });
             });
         }
@@ -139,7 +140,7 @@
         function buildCentersList() {
             // Get the listing DOM element
             let listings = document.getElementById('listings');
-            let filters = document.getElementById('filters');
+            let filters = document.getElementById('region-filter');
 
             // Transform the list of centers (elements) into map markers
             window.geojson['features'].forEach((feature, idx) => {
@@ -189,16 +190,19 @@
 
                     // Set the button text to first letter upper case
                     filterButton.innerText = region[0].toUpperCase() + region.slice(1);
-                    filterButton.onclick = () => filterRegion(region, filterButton);
+                    filterButton.onclick = () => {
+                        flyToCenter(feature, 10);
+                        filterRegion(region, filterButton)
+                    };
                     filters.appendChild(filterButton);
                 }
             });
         }
 
-        function flyToCenter(currentCenter) {
+        function flyToCenter(currentCenter, zoom = 14) {
             map.flyTo({
                 center: currentCenter['geometry']['coordinates'],
-                zoom: 15,
+                zoom: zoom,
                 speed: 5,
                 curve: 1
             });
@@ -240,7 +244,7 @@
             // As the data from the gym's website is formatted to start the week on
             // mondays (monday -> 0 ... sunday -> 6), we need
             // to increment dow by 1, while keeping into perspective the 0 to 6 range
-            dow = (window.dow + 6) % 7;
+            let dow = (window.dow + 6) % 7;
 
             // // Expected time format is minutes
             // if (timeStart === null) timeStart = Number.POSITIVE_INFINITY;
@@ -281,7 +285,7 @@
                 Array.prototype.forEach.call(listings, (listing) => listing.style.display = 'block');
             } else {
                 let markers = document.getElementsByClassName('marker');
-                
+
                 // Iterate over the NodeList returned by the function 'getElementsByClassName'
                 Array.prototype.forEach.call(markers, function(marker) {
                     // Hide all the other markers
@@ -317,11 +321,10 @@
             // using modulo % to get a number between 0 and 6
             let todayDow = window.dow + 7;
             for (let idx = 1; idx <= 6; idx++) {
-                dow = (todayDow - idx) % 7;
+                let dow = (todayDow - idx) % 7;
 
                 let a = document.createElement('a');
                 a.href = '#';
-
                 a.innerText = daysOfWeek[dow];
                 a.onclick = () => {
                     window.dow = dow;

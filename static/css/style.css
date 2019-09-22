@@ -17,19 +17,79 @@ a:hover {
 }
 
 .sidebar {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
     overflow: hidden;
     border-right: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .heading {
+    flex: 0 1 10%;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .filters-container {
+    flex: 1 0 auto;     
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     width: 100%;
     display: block;
     overflow: hidden;
+}
+
+.listings {
+    overflow: auto;
+    /* height: 100%; */
+    flex: 1 1 auto;
+
+    top: 0;
+    bottom: 0;
+    padding-bottom: 60px;
+}
+
+.listings .listing {
+    display: block;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 10px;
+    text-decoration: none;
+    font-size: 0.625em;
+}
+
+.listings .listing:last-child { border-bottom: none; }
+
+.listings .listing .title {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+}
+
+.listings .listing .title small { font-weight: 400; }
+
+.listings .listing.active .title,
+.listings .listing .title:hover { color: #fa5333; }
+
+.listings .listing.active {
+    background-color: #fff;
+    color: #0d2134;
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #fa5333;
+  border-radius: 0;
+}
+
+.clearfix { display: block; }
+
+.clearfix::after {
+  content: '.';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
 }
 
 .filter-button {
@@ -92,59 +152,6 @@ a:hover {
 
 .date-filter:hover .dropbtn {
   background-color: #2980B9;
-}
-
-
-
-.listings {
-    height: 100%;
-    overflow: auto;
-    padding-bottom: 60px;
-}
-
-.listings .listing {
-    display: block;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 10px;
-    text-decoration: none;
-    font-size: 0.625em;
-}
-
-.listings .listing:last-child { border-bottom: none; }
-
-.listings .listing .title {
-    display: block;
-    color: #fff;
-    font-weight: 700;
-}
-
-.listings .listing .title small { font-weight: 400; }
-
-.listings .listing.active .title,
-.listings .listing .title:hover { color: #fa5333; }
-
-.listings .listing.active {
-    background-color: #fff;
-    color: #0d2134;
-}
-
-::-webkit-scrollbar-track {
-  background: none;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #fa5333;
-  border-radius: 0;
-}
-
-.clearfix { display: block; }
-
-.clearfix::after {
-  content: '.';
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
